@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: portfolio
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_SITE_URL
+        value: https://ahamed-4e0q.onrender.com
