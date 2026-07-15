@@ -7,10 +7,10 @@ interface PreloaderProps {
 }
 
 const BOOT_LINES = [
-  "mounting filesystem",
-  "compiling experience layer",
-  "warming up aurora field",
-  "syncing agents",
+  "loading content",
+  "preparing layout",
+  "rendering visuals",
+  "almost ready",
 ];
 
 export function Preloader({ name, onDone }: PreloaderProps) {
@@ -62,17 +62,17 @@ export function Preloader({ name, onDone }: PreloaderProps) {
         className="pointer-events-none absolute inset-0 opacity-60"
         style={{
           background:
-            "radial-gradient(ellipse 50% 40% at 50% 50%, oklch(0.62 0.22 293 / 0.25), transparent 70%)",
+            "radial-gradient(ellipse 50% 40% at 50% 50%, var(--accent-soft), transparent 70%)",
         }}
       />
 
       <motion.p
-        className="font-mono-ui relative mb-6 text-xs uppercase tracking-[0.3em] text-[var(--aurora-cyan)]"
+        className="font-mono-ui relative mb-6 text-xs uppercase tracking-[0.3em] text-[var(--ink-faint)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
-        booting portfolio<span className="animate-pulse">_</span>
+        loading portfolio<span className="animate-pulse">_</span>
       </motion.p>
 
       <motion.h1
@@ -85,13 +85,13 @@ export function Preloader({ name, onDone }: PreloaderProps) {
       </motion.h1>
 
       <div className="relative mt-8 w-56 sm:w-64">
-        <div className="h-px w-full overflow-hidden bg-white/10">
+        <div className="h-px w-full overflow-hidden bg-[var(--line)]">
           <motion.div
             className="h-full"
             style={{
               width: `${progress}%`,
               background:
-                "linear-gradient(90deg, var(--aurora-violet), var(--aurora-cyan))",
+                "linear-gradient(90deg, var(--accent), var(--accent-secondary))",
             }}
           />
         </div>
