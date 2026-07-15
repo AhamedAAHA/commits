@@ -1,5 +1,6 @@
 import { ArrowUp } from "lucide-react";
 import type { NavItem, SocialLink } from "../data/siteContent";
+import { scrollToSection } from "../lib/smoothScroll";
 import { MagneticButton } from "./animations/MagneticButton";
 import { SocialLinks } from "./SocialLinks";
 
@@ -13,19 +14,16 @@ export function Footer({ name, nav, socials }: FooterProps) {
   const year = new Date().getFullYear();
 
   function scrollTo(id: string) {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    scrollToSection(id);
   }
 
   return (
-    <footer className="relative border-t border-[var(--line)] bg-[oklch(0.09_0.025_280_/0.4)] px-4 py-12 backdrop-blur-xl sm:px-6 lg:px-8">
+    <footer className="relative border-t border-[var(--line)] bg-[var(--void)]/45 px-4 py-12 backdrop-blur-xl sm:px-6 lg:px-8">
       <span
         className="absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            "linear-gradient(90deg, transparent, var(--aurora-violet), var(--aurora-cyan), var(--aurora-magenta), transparent)",
+            "linear-gradient(90deg, transparent, var(--accent), transparent)",
         }}
         aria-hidden
       />
@@ -51,7 +49,7 @@ export function Footer({ name, nav, socials }: FooterProps) {
                 <button
                   type="button"
                   onClick={() => scrollTo(item.id)}
-                  className="focus-ring text-sm text-[var(--ink-soft)] transition hover:text-[var(--aurora-cyan)]"
+                  className="focus-ring text-sm text-[var(--ink-soft)] transition hover:text-[var(--accent)]"
                 >
                   {item.label}
                 </button>
