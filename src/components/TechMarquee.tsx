@@ -9,7 +9,7 @@ export function TechMarquee({ items }: TechMarqueeProps) {
 
   return (
     <div
-      className="relative overflow-hidden border-y border-[var(--line)] bg-black/15 py-3"
+      className="relative overflow-hidden border-y border-[var(--line)] bg-[var(--overlay-base)]/15 py-3"
       aria-hidden
     >
       <div
@@ -27,7 +27,7 @@ export function TechMarquee({ items }: TechMarqueeProps) {
             className="font-mono-ui flex items-center gap-3 whitespace-nowrap px-6 text-xs uppercase tracking-[0.2em] text-[var(--ink-faint)]"
           >
             {item}
-            <span className="h-1 w-1 rounded-full bg-[var(--aurora-cyan)]" />
+            <span className="h-1 w-1 rounded-full bg-[var(--accent)]" />
           </span>
         ))}
       </div>
