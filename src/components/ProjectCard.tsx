@@ -1,14 +1,8 @@
-import { useState } from "react";
 import { Code2, ExternalLink, Map, Play, Rocket } from "lucide-react";
 import type { Project, ProjectLink } from "../data/siteContent";
-import {
-  getLinkByLabel,
-  projectSummary,
-  projectThumbnail,
-} from "../lib/showcaseHelpers";
+import { getLinkByLabel, projectSummary } from "../lib/showcaseHelpers";
 import { useTilt } from "../lib/useTilt";
-import { ShowcaseThumbnail } from "./ShowcaseThumbnail";
-import { ThumbnailLightbox } from "./ThumbnailLightbox";
+import { ProjectVisual } from "./ProjectVisual";
 
 interface ProjectCardProps {
   project: Project;
@@ -16,10 +10,10 @@ interface ProjectCardProps {
 }
 
 const secondaryBtn =
-  "focus-ring inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-[var(--line)] bg-black/20 px-3 py-2 text-xs font-semibold text-[var(--ink-soft)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]";
+  "focus-ring inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-[var(--line)] bg-[var(--overlay-base)]/20 px-3 py-2 text-xs font-semibold text-[var(--ink-soft)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]";
 
 const primaryBtn =
-  "focus-ring inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-[oklch(0.81_0.15_290_/0.46)] bg-[var(--accent-soft)] px-3 py-2 text-xs font-semibold text-[var(--accent)] transition hover:bg-[oklch(0.7_0.15_290_/0.18)]";
+  "focus-ring inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-[oklch(0.81_0.15_258_/0.46)] bg-[var(--accent-soft)] px-3 py-2 text-xs font-semibold text-[var(--accent)] transition hover:bg-[oklch(0.7_0.15_258_/0.18)]";
 
 function linkIcon(label: string) {
   const key = label.toLowerCase();
@@ -43,7 +37,6 @@ function contextLine(context: string): string {
 }
 
 export function ProjectCard({ project, onOpenJourney }: ProjectCardProps) {
-  const [showLightbox, setShowLightbox] = useState(false);
   const tilt = useTilt(5);
   const liveApp = getLinkByLabel(project.links, "Live App");
   const demo = getLinkByLabel(project.links, "Demo Video");
@@ -52,7 +45,6 @@ export function ProjectCard({ project, onOpenJourney }: ProjectCardProps) {
   const hasJourney = Boolean(project.journeyId && onOpenJourney);
   const visibleStack = project.stack.slice(0, 5);
   const extraStack = project.stack.length - visibleStack.length;
-  const thumb = projectThumbnail(project);
   const context = contextLine(project.context);
 
   const primaryActions: {
@@ -98,25 +90,20 @@ export function ProjectCard({ project, onOpenJourney }: ProjectCardProps) {
   });
 
   return (
-    <>
-      <article
-        ref={tilt.ref}
-        onMouseMove={tilt.onMouseMove}
-        onMouseLeave={tilt.onMouseLeave}
-        className="showcase-card showcase-card-hover spotlight-card hud-frame flex h-full flex-col overflow-hidden rounded-3xl [transform-style:preserve-3d]"
-      >
-        <ShowcaseThumbnail
-          src={thumb}
-          label={project.title}
-          onClick={() => setShowLightbox(true)}
-        />
+    <article
+      ref={tilt.ref}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      className="showcase-card showcase-card-hover spotlight-card hud-frame flex h-full flex-col overflow-hidden rounded-3xl [transform-style:preserve-3d]"
+    >
+      <ProjectVisual title={project.title} stack={project.stack} />
 
         <div className="showcase-card__body flex flex-1 flex-col p-5 sm:p-6">
           <h3 className="text-lg font-semibold leading-snug text-[var(--ink)]">
             {project.title}
           </h3>
           {context ? (
-            <p className="mt-1 text-xs leading-snug text-[oklch(0.78_0.11_290)]">
+            <p className="mt-1 text-xs leading-snug text-[var(--accent)]">
               {context}
             </p>
           ) : null}
@@ -128,7 +115,7 @@ export function ProjectCard({ project, onOpenJourney }: ProjectCardProps) {
             {visibleStack.map((technology) => (
               <li
                 key={technology}
-                className="rounded-md border border-[var(--line)] bg-black/25 px-2 py-0.5 text-xs font-medium text-[var(--ink-soft)]"
+                className="rounded-md border border-[var(--line)] bg-[var(--overlay-base)]/25 px-2 py-0.5 text-xs font-medium text-[var(--ink-soft)]"
               >
                 {technology}
               </li>
@@ -169,15 +156,6 @@ export function ProjectCard({ project, onOpenJourney }: ProjectCardProps) {
             ) : null}
           </div>
         </div>
-      </article>
-
-      {showLightbox ? (
-        <ThumbnailLightbox
-          src={thumb}
-          alt={project.title}
-          onClose={() => setShowLightbox(false)}
-        />
-      ) : null}
-    </>
+    </article>
   );
 }
