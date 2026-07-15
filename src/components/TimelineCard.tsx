@@ -42,7 +42,7 @@ export function TimelineCard({
               className="flex gap-2 text-sm leading-relaxed text-[var(--ink-soft)]"
             >
               <span
-                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)] shadow-[0_0_10px_oklch(0.81_0.15_290/0.75)]"
+                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)] shadow-[0_0_10px_oklch(0.81_0.15_258/0.75)]"
                 aria-hidden
               />
               <span className="min-w-0 flex-1">{bullet}</span>
@@ -58,7 +58,7 @@ export function TimelineCard({
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="focus-ring inline-flex items-center gap-1.5 rounded-lg border border-[oklch(0.81_0.15_290_/0.26)] bg-[var(--accent-soft)] px-3 py-2 text-xs font-semibold text-[var(--accent)] transition hover:border-[oklch(0.81_0.15_290_/0.46)] hover:bg-[oklch(0.7_0.15_290_/0.18)]"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-lg border border-[oklch(0.81_0.15_258_/0.26)] bg-[var(--accent-soft)] px-3 py-2 text-xs font-semibold text-[var(--accent)] transition hover:border-[oklch(0.81_0.15_258_/0.46)] hover:bg-[oklch(0.7_0.15_258_/0.18)]"
             >
               {link.label}
               <ExternalLink className="h-3.5 w-3.5 opacity-80" aria-hidden />
