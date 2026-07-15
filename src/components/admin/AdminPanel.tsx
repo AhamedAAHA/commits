@@ -418,7 +418,7 @@ export function AdminPanel() {
           <button
             type="button"
             onClick={handleSave}
-            className="focus-ring flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-semibold text-[#0b0716]"
+            className="focus-ring flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-semibold text-[var(--accent-ink)]"
           >
             <Save className="h-3.5 w-3.5" />
             {saved ? "Saved!" : "Save"}
@@ -472,7 +472,7 @@ export function AdminPanel() {
               className={`focus-ring shrink-0 rounded-lg px-3 py-2 text-left text-sm transition ${
                 tab === t.id
                   ? "bg-[var(--accent-soft)] font-semibold text-[var(--accent)]"
-                  : "text-[var(--ink-soft)] hover:bg-black/30"
+                  : "text-[var(--ink-soft)] hover:bg-[var(--overlay-base)]/30"
               }`}
             >
               {t.label}
@@ -599,7 +599,7 @@ export function AdminPanel() {
                         };
                         patch("socials", next);
                       }}
-                      className="focus-ring w-full rounded-lg border border-[var(--line)] bg-black/30 px-3 py-2 text-sm text-[var(--ink)]"
+                      className="focus-ring w-full rounded-lg border border-[var(--line)] bg-[var(--overlay-base)]/30 px-3 py-2 text-sm text-[var(--ink)]"
                     >
                       <option value="linkedin">LinkedIn</option>
                       <option value="github">GitHub</option>
@@ -881,7 +881,7 @@ export function AdminPanel() {
                             coreCategories: next,
                           });
                         }}
-                        className="focus-ring w-full rounded-lg border border-[var(--line)] bg-black/30 px-3 py-2 text-sm text-[var(--ink)]"
+                        className="focus-ring w-full rounded-lg border border-[var(--line)] bg-[var(--overlay-base)]/30 px-3 py-2 text-sm text-[var(--ink)]"
                       >
                         <option value="frontend">Frontend</option>
                         <option value="backend">Backend</option>
