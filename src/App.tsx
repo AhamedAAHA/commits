@@ -1,13 +1,16 @@
 import { useState, useCallback, useEffect, type CSSProperties } from "react";
 import { AnimatePresence } from "framer-motion";
+import { AboutSection } from "./components/AboutSection";
 import { AdminButton } from "./components/admin/AdminButton";
 import { AdminLogin } from "./components/admin/AdminLogin";
 import { AdminPanel } from "./components/admin/AdminPanel";
-import { AuroraBackground } from "./components/animations/AuroraBackground";
+import { SceneBackground } from "./components/animations/SceneBackground";
 import { CustomCursor } from "./components/animations/CustomCursor";
 import { Preloader } from "./components/animations/Preloader";
 import { ScrollReveal } from "./components/animations/ScrollReveal";
+import { SmoothScroll } from "./components/animations/SmoothScroll";
 import { StaggerReveal } from "./components/animations/StaggerReveal";
+import { scrollToSection } from "./lib/smoothScroll";
 import { Footer } from "./components/Footer";
 import { GitHubActivity } from "./components/GitHubActivity";
 import { HackathonCard } from "./components/HackathonCard";
@@ -45,10 +48,7 @@ function App() {
     : undefined;
 
   const scrollToContact = useCallback(() => {
-    document.getElementById("contact")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    scrollToSection("contact");
   }, []);
 
   const openJourney = useCallback((journeyId: string) => {
@@ -63,7 +63,15 @@ function App() {
         ) : null}
       </AnimatePresence>
       <CustomCursor />
-      <AuroraBackground />
+      <SmoothScroll
+        paused={
+          booting ||
+          showAllProjects ||
+          showAllHackathons ||
+          Boolean(activeJourney)
+        }
+      />
+      <SceneBackground />
       <div className="relative z-10">
         <a className="skip-link focus-ring" href="#main-content">
           Skip to content
@@ -84,37 +92,18 @@ function App() {
           <TechMarquee items={content.skills.tools.map((tool) => tool.name)} />
 
           <Section id="about" title={content.sections.about.title}>
-            <ScrollReveal>
-              <p className="hud-frame glass max-w-3xl whitespace-pre-line rounded-3xl p-6 text-base leading-relaxed text-[var(--ink-soft)] sm:p-8 sm:text-lg">
-                {content.summary}
-              </p>
-            </ScrollReveal>
-          </Section>
-
-          <Section
-            id="hackathons"
-            title={content.sections.hackathons.title}
-            subtitle={content.sections.hackathons.subtitle}
-          >
-            <StaggerReveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {featuredHackathons.map((entry) => (
-                <HackathonCard key={entry.id ?? entry.role} entry={entry} compact />
-              ))}
-            </StaggerReveal>
-            {content.hackathons.length > featuredHackathons.length ? (
-              <ScrollReveal>
-                <div className="mt-8 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={() => setShowAllHackathons(true)}
-                    data-cursor-text="VIEW"
-                    className="focus-ring font-mono-ui rounded-full border border-[var(--line)] bg-black/20 px-6 py-3 text-xs uppercase tracking-wider text-[var(--ink-soft)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                  >
-                    View all hackathons ···
-                  </button>
-                </div>
-              </ScrollReveal>
-            ) : null}
+            <AboutSection
+              summary={content.summary}
+              stats={[
+                { label: "Projects shipped", value: String(content.projects.length) },
+                { label: "Hackathons", value: String(content.hackathons.length) },
+                {
+                  label: "Certifications",
+                  value: String(content.certifications.length),
+                },
+                { label: "Tools & tech", value: String(content.skills.tools.length) },
+              ]}
+            />
           </Section>
 
           <Section
@@ -138,9 +127,37 @@ function App() {
                     type="button"
                     onClick={() => setShowAllProjects(true)}
                     data-cursor-text="VIEW"
-                    className="focus-ring font-mono-ui rounded-full border border-[var(--line)] bg-black/20 px-6 py-3 text-xs uppercase tracking-wider text-[var(--ink-soft)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                    className="focus-ring font-mono-ui rounded-full border border-[var(--line)] bg-[var(--overlay-base)]/20 px-6 py-3 text-xs uppercase tracking-wider text-[var(--ink-soft)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
                   >
                     View all projects ···
+                  </button>
+                </div>
+              </ScrollReveal>
+            ) : null}
+          </Section>
+
+          <SkillsSection />
+
+          <Section
+            id="hackathons"
+            title={content.sections.hackathons.title}
+            subtitle={content.sections.hackathons.subtitle}
+          >
+            <StaggerReveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredHackathons.map((entry) => (
+                <HackathonCard key={entry.id ?? entry.role} entry={entry} compact />
+              ))}
+            </StaggerReveal>
+            {content.hackathons.length > featuredHackathons.length ? (
+              <ScrollReveal>
+                <div className="mt-8 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllHackathons(true)}
+                    data-cursor-text="VIEW"
+                    className="focus-ring font-mono-ui rounded-full border border-[var(--line)] bg-[var(--overlay-base)]/20 px-6 py-3 text-xs uppercase tracking-wider text-[var(--ink-soft)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                  >
+                    View all hackathons ···
                   </button>
                 </div>
               </ScrollReveal>
@@ -194,12 +211,12 @@ function App() {
                   return (
                     <li
                       key={language.name}
-                      className="group relative overflow-hidden rounded-full border border-[var(--line)] bg-black/20 transition-colors duration-300 hover:border-[oklch(0.81_0.15_290_/0.45)]"
+                      className="group relative overflow-hidden rounded-full border border-[var(--line)] bg-[var(--overlay-base)]/20 transition-colors duration-300 hover:border-[oklch(0.81_0.15_258_/0.45)]"
                       style={{ ["--lang-fill" as string]: fill } as CSSProperties}
                     >
                       <span
                         aria-hidden
-                        className="pointer-events-none absolute inset-y-0 left-0 w-0 bg-[oklch(0.7_0.15_290_/0.32)] transition-[width] duration-500 ease-out group-hover:w-[var(--lang-fill)]"
+                        className="pointer-events-none absolute inset-y-0 left-0 w-0 bg-[oklch(0.7_0.15_258_/0.32)] transition-[width] duration-500 ease-out group-hover:w-[var(--lang-fill)]"
                       />
                       <span className="relative z-10 inline-flex items-center px-4 py-1.5 text-sm text-[var(--ink-soft)]">
                         <span className="font-medium text-[var(--ink)]">{language.name}</span>
@@ -212,8 +229,6 @@ function App() {
               </ul>
             </ScrollReveal>
           </Section>
-
-          <SkillsSection />
 
           <Section
             id="activity"
