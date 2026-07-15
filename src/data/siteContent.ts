@@ -74,10 +74,10 @@ export const siteContent = {
 
   nav: [
     { id: "about", label: "About" },
-    { id: "hackathons", label: "Hackathons" },
     { id: "projects", label: "Projects" },
-    { id: "education", label: "Education" },
     { id: "skills", label: "Skills" },
+    { id: "hackathons", label: "Hackathons" },
+    { id: "education", label: "Education" },
     { id: "activity", label: "Activity" },
     { id: "contact", label: "Contact" },
   ] satisfies NavItem[],
