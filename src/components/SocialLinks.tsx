@@ -57,7 +57,7 @@ export function SocialLinks({
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className={`focus-ring inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-black/20 px-4 py-2 text-sm font-medium text-[var(--ink-soft)] transition hover:border-[oklch(0.81_0.15_290_/0.34)] hover:bg-[var(--accent-soft)] hover:text-[var(--ink)] ${buttonClassName}`}
+            className={`focus-ring inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--overlay-base)]/20 px-4 py-2 text-sm font-medium text-[var(--ink-soft)] transition hover:border-[oklch(0.81_0.15_258_/0.34)] hover:bg-[var(--accent-soft)] hover:text-[var(--ink)] ${buttonClassName}`}
           >
             <SocialGlyph icon={link.icon} />
             {link.label}
