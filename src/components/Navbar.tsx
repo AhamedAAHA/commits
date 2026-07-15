@@ -2,6 +2,9 @@ import { Menu, X } from "lucide-react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { NavItem } from "../data/siteContent";
+import { scrollToSection } from "../lib/smoothScroll";
+import { CursorToggle } from "./CursorToggle";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface NavbarProps {
   nav: readonly NavItem[];
@@ -24,8 +27,7 @@ export function Navbar({ nav, name }: NavbarProps) {
 
   const scrollTo = useCallback((id: string) => {
     setOpen(false);
-    const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToSection(id);
   }, []);
 
   useEffect(() => {
@@ -109,7 +111,7 @@ export function Navbar({ nav, name }: NavbarProps) {
     <header
       className={`fixed inset-x-0 top-0 z-[100] border-b transition-colors duration-500 ${
         scrolled
-          ? "border-white/10 bg-[oklch(0.09_0.025_280_/0.72)] backdrop-blur-xl"
+          ? "border-[var(--line)] bg-[var(--void)]/75 backdrop-blur-xl"
           : "border-transparent bg-transparent"
       }`}
     >
@@ -119,7 +121,7 @@ export function Navbar({ nav, name }: NavbarProps) {
         style={{
           scaleX: progress,
           background:
-            "linear-gradient(90deg, var(--aurora-violet), var(--aurora-cyan), var(--aurora-magenta))",
+            "linear-gradient(90deg, var(--accent), var(--accent-secondary))",
         }}
       />
 
@@ -137,8 +139,8 @@ export function Navbar({ nav, name }: NavbarProps) {
           }}
         >
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--aurora-cyan)] opacity-60" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--aurora-cyan)]" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" />
           </span>
           {name}
         </a>
@@ -158,7 +160,7 @@ export function Navbar({ nav, name }: NavbarProps) {
                 {activeId === item.id ? (
                   <motion.span
                     layoutId="nav-active-pill"
-                    className="absolute inset-0 -z-10 rounded-full border border-[oklch(0.72_0.19_290_/0.4)] bg-[oklch(0.72_0.19_290_/0.14)]"
+                    className="absolute inset-0 -z-10 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/[0.14]"
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 ) : null}
@@ -167,24 +169,28 @@ export function Navbar({ nav, name }: NavbarProps) {
           ))}
         </ul>
 
-        <button
-          ref={toggleRef}
-          type="button"
-          className="focus-ring rounded-lg p-2 text-[var(--ink)] md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen((o) => !o)}
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          <span className="sr-only">Toggle menu</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <CursorToggle />
+          <button
+            ref={toggleRef}
+            type="button"
+            className="focus-ring rounded-lg p-2 text-[var(--ink)] md:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            onClick={() => setOpen((o) => !o)}
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <span className="sr-only">Toggle menu</span>
+          </button>
+        </div>
       </nav>
 
       {open ? (
         <div
           ref={menuRef}
           id="mobile-nav"
-          className="border-t border-[var(--line)] bg-[oklch(0.09_0.025_280_/0.85)] px-4 py-4 backdrop-blur-xl md:hidden"
+          className="border-t border-[var(--line)] bg-[var(--void)]/90 px-4 py-4 backdrop-blur-xl md:hidden"
         >
           <ul className="flex flex-col gap-1">
             {nav.map((item) => (
@@ -193,9 +199,9 @@ export function Navbar({ nav, name }: NavbarProps) {
                   type="button"
                   onClick={() => scrollTo(item.id)}
                   aria-current={activeId === item.id ? "page" : undefined}
-                  className={`focus-ring font-mono-ui w-full rounded-lg px-3 py-3 text-left text-sm uppercase tracking-wider hover:bg-white/[0.06] hover:text-[var(--ink)] ${
+                  className={`focus-ring font-mono-ui w-full rounded-lg px-3 py-3 text-left text-sm uppercase tracking-wider hover:bg-[var(--surface-hover)] hover:text-[var(--ink)] ${
                     activeId === item.id
-                      ? "bg-white/[0.08] text-[var(--ink)]"
+                      ? "bg-[var(--surface-hover)] text-[var(--ink)]"
                       : "text-[var(--ink-faint)]"
                   }`}
                 >
