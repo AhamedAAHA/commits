@@ -19,5 +19,5 @@ npm run dev
 npm run build
 npm run preview
 ```
-nn
+
 The project is configured for Netlify, Vercel, and GitHub Pages deployment.
