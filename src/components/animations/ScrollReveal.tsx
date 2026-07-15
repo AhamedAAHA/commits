@@ -5,7 +5,7 @@ type ScrollRevealProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
-  depth?: "subtle" | "strong";
+  depth?: "subtle" | "strong" | "cinematic";
 };
 
 export function ScrollReveal({
@@ -15,8 +15,10 @@ export function ScrollReveal({
   depth = "subtle",
 }: ScrollRevealProps) {
   const reduceMotion = useReducedMotion();
-  const y = depth === "strong" ? 36 : 22;
-  const scale = depth === "strong" ? 0.94 : 0.97;
+  const y = depth === "cinematic" ? 48 : depth === "strong" ? 36 : 22;
+  const scale = depth === "cinematic" ? 0.92 : depth === "strong" ? 0.94 : 0.97;
+  const blur = depth === "cinematic" ? 10 : 6;
+  const duration = depth === "cinematic" ? 0.9 : 0.7;
 
   if (reduceMotion) {
     return <div className={className}>{children}</div>;
@@ -25,11 +27,11 @@ export function ScrollReveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y, scale, filter: "blur(6px)" }}
+      initial={{ opacity: 0, y, scale, filter: `blur(${blur}px)` }}
       whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{
-        duration: 0.7,
+        duration,
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}
