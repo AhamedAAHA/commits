@@ -29,10 +29,10 @@ export function JourneyModal({ journey, onClose }: JourneyModalProps) {
             {journey.highlights.map((bullet, index) => (
               <li
                 key={`${bullet}-${index}`}
-                className="flex gap-3 rounded-2xl border border-[var(--line)] bg-black/20 p-4 text-sm leading-relaxed text-[var(--ink-soft)]"
+                className="flex gap-3 rounded-2xl border border-[var(--line)] bg-[var(--overlay-base)]/20 p-4 text-sm leading-relaxed text-[var(--ink-soft)]"
               >
                 <span
-                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)] shadow-[0_0_10px_oklch(0.81_0.15_290/0.75)]"
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)] shadow-[0_0_10px_oklch(0.81_0.15_258/0.75)]"
                   aria-hidden
                 />
                 <span>{bullet}</span>
