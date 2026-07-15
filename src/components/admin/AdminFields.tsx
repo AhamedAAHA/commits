@@ -23,7 +23,7 @@ export function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="focus-ring w-full rounded-lg border border-[var(--line)] bg-black/30 px-3 py-2 text-sm text-[var(--ink)]"
+        className="focus-ring w-full rounded-lg border border-[var(--line)] bg-[var(--overlay-base)]/30 px-3 py-2 text-sm text-[var(--ink)]"
       />
     </label>
   );
@@ -46,7 +46,7 @@ export function TextArea({ label, value, onChange, rows = 4 }: TextAreaProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
-        className="focus-ring w-full resize-y rounded-lg border border-[var(--line)] bg-black/30 px-3 py-2 text-sm text-[var(--ink)]"
+        className="focus-ring w-full resize-y rounded-lg border border-[var(--line)] bg-[var(--overlay-base)]/30 px-3 py-2 text-sm text-[var(--ink)]"
       />
     </label>
   );
@@ -80,7 +80,7 @@ export function StringList({
                 next[index] = e.target.value;
                 onChange(next);
               }}
-              className="focus-ring min-w-0 flex-1 rounded-lg border border-[var(--line)] bg-black/30 px-3 py-2 text-sm text-[var(--ink)]"
+              className="focus-ring min-w-0 flex-1 rounded-lg border border-[var(--line)] bg-[var(--overlay-base)]/30 px-3 py-2 text-sm text-[var(--ink)]"
             />
             <button
               type="button"
@@ -114,7 +114,7 @@ interface CardProps {
 
 export function EditorCard({ title, onRemove, children }: CardProps) {
   return (
-    <div className="rounded-xl border border-[var(--line)] bg-black/25 p-4">
+    <div className="rounded-xl border border-[var(--line)] bg-[var(--overlay-base)]/25 p-4">
       <div className="mb-3 flex items-center justify-between gap-2">
         <h4 className="text-sm font-semibold text-[var(--ink)]">{title}</h4>
         {onRemove ? (
