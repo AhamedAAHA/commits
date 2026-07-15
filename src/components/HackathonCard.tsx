@@ -21,7 +21,7 @@ export function HackathonCard({ entry }: HackathonCardProps) {
       onMouseLeave={tilt.onMouseLeave}
       className="showcase-card showcase-card-hover spotlight-card hud-frame flex h-full flex-col rounded-3xl p-5 [transform-style:preserve-3d] sm:p-6"
     >
-      <p className="flex items-center gap-2 text-xs font-medium tracking-wide text-[oklch(0.78_0.11_290)]">
+      <p className="flex items-center gap-2 text-xs font-medium tracking-wide text-[var(--accent)]">
         <span
           className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]"
           aria-hidden
