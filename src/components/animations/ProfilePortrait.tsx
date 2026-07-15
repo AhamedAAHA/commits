@@ -21,7 +21,7 @@ export function ProfilePortrait({ src, alt }: ProfilePortraitProps) {
           className="absolute -inset-3 rounded-[2rem] opacity-70 blur-2xl transition-opacity duration-300 group-hover:opacity-95"
           style={{
             background:
-              "linear-gradient(135deg, oklch(0.62 0.22 293 / 0.3), oklch(0.8 0.15 205 / 0.22))",
+              "linear-gradient(135deg, var(--accent-soft), color-mix(in oklch, var(--accent-secondary) 35%, transparent))",
           }}
           aria-hidden
         />
@@ -44,7 +44,7 @@ export function ProfilePortrait({ src, alt }: ProfilePortraitProps) {
         </div>
 
         <div className="pointer-events-none absolute -right-2 -top-2 h-24 w-24 sm:h-28 sm:w-28">
-          <PortraitAccent className="h-full w-full drop-shadow-[0_0_24px_oklch(0.72_0.19_290/0.32)]" />
+          <PortraitAccent className="h-full w-full drop-shadow-[0_0_24px_oklch(0.72_0.19_258/0.32)]" />
         </div>
       </div>
     </div>
