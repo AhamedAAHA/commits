@@ -69,7 +69,7 @@ export function AdminLogin() {
       className="fixed inset-0 z-[200] flex items-center justify-center p-4"
     >
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-[var(--overlay-base)]/70 backdrop-blur-sm"
         onClick={closeLogin}
         aria-hidden="true"
       />
@@ -103,7 +103,7 @@ export function AdminLogin() {
                 setCode(e.target.value);
                 setError("");
               }}
-              className="focus-ring w-full rounded-lg border border-[var(--line)] bg-black/30 px-3 py-2.5 text-sm text-[var(--ink)]"
+              className="focus-ring w-full rounded-lg border border-[var(--line)] bg-[var(--overlay-base)]/30 px-3 py-2.5 text-sm text-[var(--ink)]"
               placeholder="Enter code"
             />
           </label>
@@ -114,7 +114,7 @@ export function AdminLogin() {
           ) : null}
           <button
             type="submit"
-            className="focus-ring mt-1 rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[#0b0716] transition hover:opacity-90"
+            className="focus-ring mt-1 rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--accent-ink)] transition hover:opacity-90"
           >
             Unlock admin
           </button>
