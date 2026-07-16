@@ -8,9 +8,7 @@ import { SceneBackground } from "./components/animations/SceneBackground";
 import { CustomCursor } from "./components/animations/CustomCursor";
 import { Preloader } from "./components/animations/Preloader";
 import { ScrollReveal } from "./components/animations/ScrollReveal";
-import { SmoothScroll } from "./components/animations/SmoothScroll";
 import { StaggerReveal } from "./components/animations/StaggerReveal";
-import { scrollToSection } from "./lib/smoothScroll";
 import { Footer } from "./components/Footer";
 import { GitHubActivity } from "./components/GitHubActivity";
 import { HackathonCard } from "./components/HackathonCard";
@@ -26,6 +24,7 @@ import { TechMarquee } from "./components/TechMarquee";
 import { TimelineCard } from "./components/TimelineCard";
 import { useContent } from "./context/ContentContext";
 import { findJourney, getFeaturedItems, orderByCatalog } from "./lib/showcaseHelpers";
+import { useScrollSmoother } from "./lib/useScrollSmoother";
 
 function App() {
   const { content } = useContent();
@@ -41,6 +40,8 @@ function App() {
     };
   }, [booting]);
 
+  useScrollSmoother(!booting);
+
   const featuredProjects = getFeaturedItems(content.projects);
   const featuredHackathons = getFeaturedItems(content.hackathons);
   const activeJourney = activeJourneyId
@@ -48,7 +49,10 @@ function App() {
     : undefined;
 
   const scrollToContact = useCallback(() => {
-    scrollToSection("contact");
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }, []);
 
   const openJourney = useCallback((journeyId: string) => {
@@ -63,21 +67,15 @@ function App() {
         ) : null}
       </AnimatePresence>
       <CustomCursor />
-      <SmoothScroll
-        paused={
-          booting ||
-          showAllProjects ||
-          showAllHackathons ||
-          Boolean(activeJourney)
-        }
-      />
       <SceneBackground />
-      <div className="relative z-10">
-        <a className="skip-link focus-ring" href="#main-content">
-          Skip to content
-        </a>
-        <Navbar nav={content.nav} name={content.hero.name} />
-        <main id="main-content">
+      <Navbar nav={content.nav} name={content.hero.name} />
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <div className="relative z-10">
+            <a className="skip-link focus-ring" href="#main-content">
+              Skip to content
+            </a>
+            <main id="main-content">
           <Hero
             name={content.hero.name}
             title={content.hero.title}
@@ -288,7 +286,9 @@ function App() {
           </Section>
         </main>
 
-        <Footer name={content.hero.name} nav={content.nav} socials={content.socials} />
+            <Footer name={content.hero.name} nav={content.nav} socials={content.socials} />
+          </div>
+        </div>
       </div>
 
       <AdminButton />
