@@ -1,6 +1,5 @@
 import { ArrowUp } from "lucide-react";
 import type { NavItem, SocialLink } from "../data/siteContent";
-import { scrollToSection } from "../lib/smoothScroll";
 import { MagneticButton } from "./animations/MagneticButton";
 import { SocialLinks } from "./SocialLinks";
 
@@ -14,7 +13,10 @@ export function Footer({ name, nav, socials }: FooterProps) {
   const year = new Date().getFullYear();
 
   function scrollTo(id: string) {
-    scrollToSection(id);
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
 
   return (
