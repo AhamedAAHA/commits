@@ -2,7 +2,6 @@ import { Menu, X } from "lucide-react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { NavItem } from "../data/siteContent";
-import { scrollToSection } from "../lib/smoothScroll";
 import { CursorToggle } from "./CursorToggle";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -27,7 +26,8 @@ export function Navbar({ nav, name }: NavbarProps) {
 
   const scrollTo = useCallback((id: string) => {
     setOpen(false);
-    scrollToSection(id);
+    const el = document.getElementById(id);
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
   useEffect(() => {
