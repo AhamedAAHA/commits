@@ -6,9 +6,10 @@ const SceneCanvas = lazy(() =>
 );
 
 /**
- * Fixed ambient backdrop: portrait-matched sage / silver / warm-beige lighting
- * on the floating 3D field, plus soft grade, grain, and vignette so glass UI
- * stays readable in both themes.
+ * Fixed ambient backdrop: a lightweight WebGL field of floating 3D shapes
+ * (real lighting, gentle drift, scroll-linked camera) sitting under a soft
+ * color grade and fine grain. Deliberately visible — and tuned separately —
+ * in both light and dark themes.
  */
 export function SceneBackground() {
   const { theme } = useTheme();
@@ -16,13 +17,13 @@ export function SceneBackground() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
-      {/* base color grade — warm olive tint from the portrait */}
+      {/* base color grade */}
       <div
         className="absolute inset-0"
         style={{
           background: isDark
-            ? "radial-gradient(ellipse 90% 65% at 50% -8%, oklch(0.22 0.025 130 / 0.55), transparent), radial-gradient(ellipse 55% 45% at 85% 15%, oklch(0.28 0.02 70 / 0.22), transparent), var(--void)"
-            : "radial-gradient(ellipse 90% 65% at 50% -8%, oklch(0.92 0.02 95 / 0.7), transparent), radial-gradient(ellipse 55% 45% at 85% 15%, oklch(0.9 0.02 70 / 0.35), transparent), var(--void)",
+            ? "radial-gradient(ellipse 90% 65% at 50% -8%, oklch(0.24 0.03 260 / 0.75), transparent), var(--void)"
+            : "radial-gradient(ellipse 90% 65% at 50% -8%, oklch(0.9 0.015 260 / 0.8), transparent), var(--void)",
         }}
       />
 
@@ -37,8 +38,8 @@ export function SceneBackground() {
         className="absolute inset-0"
         style={{
           background: isDark
-            ? "radial-gradient(ellipse 100% 85% at 50% 45%, transparent 35%, oklch(0.06 0.01 130 / 0.62) 100%)"
-            : "radial-gradient(ellipse 100% 85% at 50% 45%, transparent 40%, oklch(0.97 0.008 95 / 0.72) 100%)",
+            ? "radial-gradient(ellipse 100% 85% at 50% 45%, transparent 35%, oklch(0.04 0.01 260 / 0.62) 100%)"
+            : "radial-gradient(ellipse 100% 85% at 50% 45%, transparent 40%, oklch(0.98 0.004 260 / 0.7) 100%)",
         }}
       />
     </div>
