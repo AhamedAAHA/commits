@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "lenis/dist/lenis.css";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -14,9 +13,8 @@
 /* ---------------------------------------------------------------------- */
 :root,
 [data-theme="dark"] {
-  /* Warm olive-black void — closer to the portrait's daylight neutrals */
-  --void: oklch(0.13 0.012 130);
-  --void-deep: oklch(0.085 0.01 130);
+  --void: oklch(0.135 0.007 260);
+  --void-deep: oklch(0.09 0.006 260);
 
   --ink: oklch(0.96 0.004 260);
   --ink-soft: oklch(0.76 0.012 260);
@@ -52,8 +50,8 @@
 }
 
 [data-theme="light"] {
-  --void: oklch(0.985 0.008 95);
-  --void-deep: oklch(0.95 0.01 95);
+  --void: oklch(0.985 0.003 260);
+  --void-deep: oklch(0.95 0.004 260);
 
   --ink: oklch(0.19 0.012 260);
   --ink-soft: oklch(0.36 0.014 260);
@@ -89,11 +87,6 @@
 
 html {
   scroll-behavior: smooth;
-}
-
-/* Lenis owns scroll easing — avoid fighting native smooth scroll */
-html.has-lenis {
-  scroll-behavior: auto;
 }
 
 body {
@@ -178,6 +171,18 @@ a.rounded-lg {
 #root {
   min-height: 100vh;
   position: relative;
+}
+
+/* GSAP ScrollSmoother structural requirements */
+#smooth-wrapper {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+#smooth-content {
+  overflow: visible;
+  width: 100%;
 }
 
 ::selection {
@@ -432,33 +437,5 @@ html {
 @media (max-width: 640px) {
   .skills-showcase [role="tablist"] {
     width: 100%;
-  }
-}
-
-/* Cinematic sticky chapters — prevent nested scroll chaining fights with Lenis */
-.skills-cinematic-chapter {
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
-}
-
-.skills-cinematic-stage {
-  min-height: min(52vh, 560px);
-}
-
-.skills-cinematic-chapter[data-chapter="1"] {
-  opacity: 1;
-  visibility: visible;
-}
-
-.skills-cinematic-chapter[data-chapter="2"],
-.skills-cinematic-chapter[data-chapter="3"] {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .will-change-transform {
-    will-change: auto !important;
   }
 }
