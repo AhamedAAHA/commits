@@ -7,14 +7,7 @@ import {
   type LucideIcon,
   X,
 } from "lucide-react";
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   skillsTabs,
@@ -25,11 +18,8 @@ import {
   type ToolItem,
 } from "../data/skillsData";
 import { useContent } from "../context/ContentContext";
-import { useCinematicScene } from "../lib/useCinematicScene";
 import { useTilt } from "../lib/useTilt";
-import { RevealText } from "./animations/RevealText";
-import { CommitCountStats, type CommitStat } from "./CommitCountStats";
-import { CursorCodingActivity } from "./CursorCodingActivity";
+import { Section } from "./Section";
 
 const CORE_ICONS: Record<CoreCategoryIcon, LucideIcon> = {
   frontend: Code2,
@@ -43,12 +33,6 @@ const tabContentVariants = {
   visible: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -8 },
 };
-
-const SKILLS_CHAPTERS = [
-  { id: 1, label: "Skills" },
-  { id: 2, label: "Impact" },
-  { id: 3, label: "Cursor" },
-] as const;
 
 function CoreCategoryCard({
   category,
@@ -428,174 +412,6 @@ function ToolsTab({
   );
 }
 
-function SkillsTabsPanel({
-  coreCategories,
-  expertiseAreas,
-  tools,
-  activeTab,
-  onTabChange,
-  onSelectTool,
-}: {
-  coreCategories: CoreCategory[];
-  expertiseAreas: ExpertiseArea[];
-  tools: ToolItem[];
-  activeTab: SkillsTabId;
-  onTabChange: (tab: SkillsTabId) => void;
-  onSelectTool: (tool: ToolItem) => void;
-}) {
-  const reduceMotion = useReducedMotion();
-  const tabListRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <div className="skills-showcase">
-      <div
-        ref={tabListRef}
-        role="tablist"
-        aria-label="Skills categories"
-        className="relative mb-8 inline-flex w-full max-w-full flex-wrap gap-1 rounded-2xl border border-[var(--line)] bg-[var(--overlay-base)]/25 p-1.5 sm:w-auto"
-      >
-        {skillsTabs.map((tab) => {
-          const isActive = activeTab === tab.id;
-
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              aria-controls={`skills-panel-${tab.id}`}
-              id={`skills-tab-${tab.id}`}
-              onClick={() => onTabChange(tab.id)}
-              className={`focus-ring relative z-10 min-h-11 flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors sm:flex-none sm:px-6 ${
-                isActive
-                  ? "text-[var(--accent-ink)]"
-                  : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
-              }`}
-            >
-              {isActive ? (
-                <motion.span
-                  layoutId="skills-tab-indicator"
-                  className="absolute inset-0 rounded-xl bg-[var(--accent)] shadow-[0_0_28px_oklch(0.81_0.15_258/0.35)]"
-                  transition={
-                    reduceMotion
-                      ? { duration: 0 }
-                      : { type: "spring", stiffness: 420, damping: 34 }
-                  }
-                />
-              ) : null}
-              <span className="relative z-10">{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div
-        role="tabpanel"
-        id={`skills-panel-${activeTab}`}
-        aria-labelledby={`skills-tab-${activeTab}`}
-      >
-        <AnimatePresence mode="wait">
-          {activeTab === "core" ? (
-            <CoreTab key="core-panel" categories={coreCategories} />
-          ) : null}
-          {activeTab === "expertise" ? (
-            <ExpertiseTab key="expertise-panel" areas={expertiseAreas} />
-          ) : null}
-          {activeTab === "tools" ? (
-            <ToolsTab
-              key="tools-panel"
-              tools={tools}
-              onSelectTool={onSelectTool}
-            />
-          ) : null}
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-}
-
-function SkillsHeader({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle?: string;
-}) {
-  return (
-    <header className="relative z-20 mb-6 shrink-0 sm:mb-8">
-      <p className="font-mono-ui mb-3 text-xs uppercase tracking-[0.25em] text-[var(--accent)]">
-        // skills
-      </p>
-      <RevealText
-        as="h2"
-        text={title}
-        mode="words"
-        effect="mask"
-        className="font-display text-3xl tracking-tight text-[var(--ink)] sm:text-4xl"
-      />
-      <span
-        className="mt-4 block h-px w-16 origin-left"
-        style={{
-          background:
-            "linear-gradient(90deg, var(--accent), var(--accent-secondary))",
-        }}
-        aria-hidden
-      />
-      {subtitle ? (
-        <RevealText
-          as="p"
-          text={subtitle}
-          mode="words"
-          effect="blur"
-          delay={0.08}
-          className="mt-4 max-w-2xl text-base text-[var(--ink-soft)]"
-        />
-      ) : null}
-    </header>
-  );
-}
-
-function ChapterProgress({
-  activeChapter,
-}: {
-  activeChapter: number;
-}) {
-  const active = SKILLS_CHAPTERS.find((chapter) => chapter.id === activeChapter);
-  const label = active?.label ?? SKILLS_CHAPTERS[0].label;
-  const indexLabel = String(activeChapter).padStart(2, "0");
-
-  return (
-    <div
-      className="pointer-events-none absolute right-3 top-1/2 z-30 flex -translate-y-1/2 flex-col items-end gap-4 sm:right-6"
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      <p className="font-mono-ui hidden text-right text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] sm:block">
-        chapter {indexLabel}
-        <span className="text-[var(--ink-soft)]"> — {label}</span>
-      </p>
-      <ul className="flex flex-col items-center gap-2.5" aria-label="Skills chapters">
-        {SKILLS_CHAPTERS.map((chapter) => {
-          const isActive = chapter.id === activeChapter;
-          return (
-            <li key={chapter.id}>
-              <span
-                className={`block rounded-full transition-all duration-300 ${
-                  isActive
-                    ? "h-2.5 w-2.5 bg-[var(--accent)] shadow-[0_0_16px_oklch(0.81_0.15_258/0.55)]"
-                    : "h-1.5 w-1.5 bg-[var(--ink-faint)]/55"
-                }`}
-                title={`Chapter ${chapter.id}: ${chapter.label}`}
-                aria-current={isActive ? "step" : undefined}
-              />
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-}
-
 export function SkillsSection() {
   const { content } = useContent();
   const { coreCategories, expertiseAreas, tools, title, subtitle } =
@@ -603,225 +419,78 @@ export function SkillsSection() {
   const reduceMotion = useReducedMotion();
   const [activeTab, setActiveTab] = useState<SkillsTabId>("core");
   const [selectedTool, setSelectedTool] = useState<ToolItem | null>(null);
-  const [isCinematic, setIsCinematic] = useState(false);
-  const [activeChapter, setActiveChapter] = useState(1);
-
-  const sectionRef = useRef<HTMLElement>(null);
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const ch1Ref = useRef<HTMLDivElement>(null);
-  const ch2Ref = useRef<HTMLDivElement>(null);
-  const ch3Ref = useRef<HTMLDivElement>(null);
+  const tabListRef = useRef<HTMLDivElement>(null);
 
   const closeModal = useCallback(() => setSelectedTool(null), []);
 
-  const impactStats = useMemo(
-    () =>
-      [
-        {
-          label: "Projects shipped",
-          value: content.projects.length,
-        },
-        {
-          label: "Hackathons",
-          value: content.hackathons.length,
-        },
-        {
-          label: "Certifications",
-          value: content.certifications.length,
-        },
-        {
-          label: "Tools & tech",
-          value: content.skills.tools.length,
-        },
-      ] as const satisfies readonly CommitStat[],
-    [
-      content.projects.length,
-      content.hackathons.length,
-      content.certifications.length,
-      content.skills.tools.length,
-    ],
-  );
-
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 900px)");
-
-    const sync = () => {
-      setIsCinematic(media.matches && !reduceMotion);
-    };
-
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, [reduceMotion]);
-
-  useEffect(() => {
-    if (!isCinematic) setActiveChapter(1);
-  }, [isCinematic]);
-
-  useCinematicScene(
-    sectionRef,
-    ({ gsap, ScrollTrigger }) => {
-      const scene = sceneRef.current;
-      const ch1 = ch1Ref.current;
-      const ch2 = ch2Ref.current;
-      const ch3 = ch3Ref.current;
-      if (!scene || !ch1 || !ch2 || !ch3) return;
-
-      const scroller = document.documentElement;
-
-      const resetChapters = (progress: number) => {
-        let o1 = 0;
-        let o2 = 0;
-        let o3 = 0;
-        let chapter = 1;
-
-        if (progress <= 0.32) {
-          o1 = 1;
-          chapter = 1;
-        } else if (progress < 0.42) {
-          const t = (progress - 0.32) / 0.1;
-          o1 = 1 - t;
-          o2 = t;
-          chapter = t < 0.5 ? 1 : 2;
-        } else if (progress <= 0.58) {
-          o2 = 1;
-          chapter = 2;
-        } else if (progress < 0.68) {
-          const t = (progress - 0.58) / 0.1;
-          o2 = 1 - t;
-          o3 = t;
-          chapter = t < 0.5 ? 2 : 3;
-        } else {
-          o3 = 1;
-          chapter = 3;
-        }
-
-        gsap.set(ch1, {
-          autoAlpha: o1,
-          y: 0,
-          scale: 1,
-          pointerEvents: o1 > 0.25 ? "auto" : "none",
-        });
-        gsap.set(ch2, {
-          autoAlpha: o2,
-          y: 0,
-          scale: 1,
-          pointerEvents: o2 > 0.25 ? "auto" : "none",
-        });
-        gsap.set(ch3, {
-          autoAlpha: o3,
-          y: 0,
-          scale: 1,
-          pointerEvents: o3 > 0.25 ? "auto" : "none",
-        });
-        setActiveChapter((prev) => (prev === chapter ? prev : chapter));
-      };
-
-      // Ensure chapter 1 is visible before scroll reaches the scene
-      resetChapters(0);
-
-      ScrollTrigger.create({
-        trigger: scene,
-        start: "top top",
-        end: "bottom bottom",
-        scroller,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => resetChapters(self.progress),
-        onEnter: () => resetChapters(0),
-        onLeaveBack: () => resetChapters(0),
-      });
-    },
-    { disabled: !isCinematic, deps: [isCinematic] },
-  );
-
-  useEffect(() => {
-    if (!isCinematic) return;
-    const id = requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-    });
-    return () => cancelAnimationFrame(id);
-  }, [isCinematic]);
-
-  const tabsPanel = (
-    <SkillsTabsPanel
-      coreCategories={coreCategories}
-      expertiseAreas={expertiseAreas}
-      tools={tools}
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-      onSelectTool={setSelectedTool}
-    />
-  );
-
   return (
-    <section
-      id="skills"
-      ref={sectionRef}
-      className={`relative scroll-mt-20 overflow-hidden px-4 sm:scroll-mt-28 sm:px-6 lg:px-8 ${
-        isCinematic ? "py-0" : "py-14 sm:py-16"
-      }`}
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[420px] w-[620px] -translate-x-1/2 rounded-full opacity-[0.09] blur-[100px]"
-        style={{ background: "var(--accent)" }}
-      />
+    <Section id="skills" title={title} subtitle={subtitle}>
+      <div className="skills-showcase">
+        <div
+          ref={tabListRef}
+          role="tablist"
+          aria-label="Skills categories"
+          className="relative mb-8 inline-flex w-full max-w-full flex-wrap gap-1 rounded-2xl border border-[var(--line)] bg-[var(--overlay-base)]/25 p-1.5 sm:w-auto"
+        >
+          {skillsTabs.map((tab) => {
+            const isActive = activeTab === tab.id;
 
-      {isCinematic ? (
-        <div ref={sceneRef} className="relative h-[320vh]">
-          <div
-            ref={pinRef}
-            className="sticky top-0 flex h-screen flex-col overflow-hidden"
-          >
-            <div className="relative mx-auto flex h-full w-full max-w-5xl flex-col px-0 py-10 sm:py-12">
-              <SkillsHeader title={title} subtitle={subtitle} />
-              <ChapterProgress activeChapter={activeChapter} />
-
-              <div className="relative min-h-0 flex-1">
-                <div
-                  ref={ch1Ref}
-                  className="skills-cinematic-chapter absolute inset-0 overflow-y-auto pr-8 sm:pr-12"
-                  data-chapter="1"
-                >
-                  {tabsPanel}
-                </div>
-
-                <div
-                  ref={ch2Ref}
-                  className="skills-cinematic-chapter absolute inset-0 overflow-y-auto pr-8 sm:pr-12"
-                  data-chapter="2"
-                >
-                  <CommitCountStats stats={impactStats} className="" />
-                </div>
-
-                <div
-                  ref={ch3Ref}
-                  className="skills-cinematic-chapter absolute inset-0 overflow-y-auto pr-8 sm:pr-12"
-                  data-chapter="3"
-                >
-                  <CursorCodingActivity className="" />
-                </div>
-              </div>
-            </div>
-          </div>
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`skills-panel-${tab.id}`}
+                id={`skills-tab-${tab.id}`}
+                onClick={() => setActiveTab(tab.id)}
+                className={`focus-ring relative z-10 min-h-11 flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors sm:flex-none sm:px-6 ${
+                  isActive ? "text-[var(--accent-ink)]" : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                }`}
+              >
+                {isActive ? (
+                  <motion.span
+                    layoutId="skills-tab-indicator"
+                    className="absolute inset-0 rounded-xl bg-[var(--accent)] shadow-[0_0_28px_oklch(0.81_0.15_258/0.35)]"
+                    transition={
+                      reduceMotion
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 420, damping: 34 }
+                    }
+                  />
+                ) : null}
+                <span className="relative z-10">{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
-      ) : (
-        <div className="relative mx-auto max-w-5xl">
-          <SkillsHeader title={title} subtitle={subtitle} scrub={false} />
-          <div className="skills-showcase">
-            {tabsPanel}
-            <CommitCountStats stats={impactStats} />
-            <CursorCodingActivity />
-          </div>
+
+        <div
+          role="tabpanel"
+          id={`skills-panel-${activeTab}`}
+          aria-labelledby={`skills-tab-${activeTab}`}
+        >
+          <AnimatePresence mode="wait">
+            {activeTab === "core" ? (
+              <CoreTab key="core-panel" categories={coreCategories} />
+            ) : null}
+            {activeTab === "expertise" ? (
+              <ExpertiseTab key="expertise-panel" areas={expertiseAreas} />
+            ) : null}
+            {activeTab === "tools" ? (
+              <ToolsTab
+                key="tools-panel"
+                tools={tools}
+                onSelectTool={setSelectedTool}
+              />
+            ) : null}
+          </AnimatePresence>
         </div>
-      )}
+      </div>
 
       <AnimatePresence>
-        {selectedTool ? (
-          <ToolModal tool={selectedTool} onClose={closeModal} />
-        ) : null}
+        {selectedTool ? <ToolModal tool={selectedTool} onClose={closeModal} /> : null}
       </AnimatePresence>
-    </section>
+    </Section>
   );
 }
